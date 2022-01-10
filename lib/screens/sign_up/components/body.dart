@@ -1,14 +1,17 @@
+import 'dart:convert';
+
 import 'package:ecommerce/constants.dart';
 import 'package:ecommerce/screens/complete_profile/complete_profile_screen.dart';
 import 'package:ecommerce/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
-
+import 'package:http/http.dart' as http;
 import '../../../../components/SocalCard.dart';
 import '../../../../components/custtom_surfix_icon.dart';
 import '../../../../components/defaults_button.dart';
 import '../../../../components/form_error.dart';
 import '../../../../components/no_account_text.dart';
+import '../../../models/user.dart';
 
 class Body extends StatelessWidget {
   @override
@@ -83,6 +86,38 @@ class _SignUpFormState extends State<SignUpForm> {
       });
   }
 
+  User user = User(
+      username: "",
+      password: "",
+      lastName: "",
+      firstName: "",
+      email: "",
+      phone: "",
+      adresse: "",
+      roles: [""]);
+  var x = 0;
+
+  Future save() async {
+    var res =
+        await http.post(Uri.parse("http://192.168.1.102:8080/api/auth/signup"),
+            headers: {'Content-Type': 'application/json'},
+            body: json.encode({
+              'username': user.username,
+              'password': user.password,
+              'lastName': user.lastName,
+              'firstName': user.firstName,
+              'email': user.email,
+              'phone': user.phone,
+              'adresse': user.adresse,
+              'roles': user.roles
+            }));
+    print(res.body);
+    if (res.body != null) {
+      x = 1;
+      print(x);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -104,6 +139,7 @@ class _SignUpFormState extends State<SignUpForm> {
                   press: () {
                     if (_formKey.currentState!.validate()) {
                       _formKey.currentState!.save();
+                      //save();
                       Navigator.pushNamed(
                           context, CompleteProfileScreen.routeName);
 
@@ -161,6 +197,9 @@ class _SignUpFormState extends State<SignUpForm> {
         MinLengthValidator(6,
             errorText: "password should be atleast 6 characters")
       ]),
+      onChanged: (val) {
+        user.password = val;
+      },
       decoration: InputDecoration(
         labelText: "Password",
         hintText: "Enter your Password",
@@ -179,6 +218,9 @@ class _SignUpFormState extends State<SignUpForm> {
         RequiredValidator(errorText: "* Required"),
         MinLengthValidator(6, errorText: "email should be atleast 6 characters")
       ]),
+      onChanged: (val) {
+        user.username = val;
+      },
       decoration: InputDecoration(
         labelText: "Email",
         hintText: "Enter your email",

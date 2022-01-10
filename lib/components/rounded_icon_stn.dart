@@ -7,6 +7,7 @@ class RoundedIconBtn extends StatelessWidget {
     Key? key,
     required this.iconData,
     required this.press,
+    required bool showShadow,
   }) : super(key: key);
   final IconData iconData;
   final GestureTapCallback press;

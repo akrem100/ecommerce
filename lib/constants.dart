@@ -15,7 +15,7 @@ final headingStyle = TextStyle(
   fontWeight: FontWeight.bold,
   color: Colors.black,
 );
-
+const defaultDuration = Duration(milliseconds: 250);
 const kAnimationDuration = Duration(milliseconds: 200);
 final RegExp emailValidatorRegExp =
     RegExp(r"^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+");

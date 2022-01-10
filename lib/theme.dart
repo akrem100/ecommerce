@@ -41,7 +41,7 @@ InputDecorationTheme inputDecorationTheme() {
 
 AppBarTheme appBarTheme() {
   return AppBarTheme(
-    color: Colors.yellow,
+    color: Colors.white,
     elevation: 0,
     brightness: Brightness.light,
     iconTheme: IconThemeData(color: Colors.black),

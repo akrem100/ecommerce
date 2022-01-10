@@ -1,16 +1,20 @@
+import 'dart:convert';
+
 import 'package:ecommerce/components/defaults_button.dart';
 import 'package:ecommerce/constants.dart';
+import 'package:ecommerce/screens/complete_profile/complete_profile_screen.dart';
 import 'package:ecommerce/screens/login_success/login_success_screen.dart';
 import 'package:ecommerce/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ecommerce/components/defaults_button.dart';
 import 'package:form_field_validator/form_field_validator.dart';
-
+import 'package:http/http.dart' as http;
 import '../../../../components/SocalCard.dart';
 import '../../../../components/custtom_surfix_icon.dart';
 import '../../../../components/form_error.dart';
 import '../../../../components/no_account_text.dart';
+import '../../../models/user.dart';
 import '../../sign_up/sign_up_screen.dart';
 
 class Body extends StatelessWidget {
@@ -74,6 +78,25 @@ class SignForm extends StatefulWidget {
   _SignFormState createState() => _SignFormState();
 }
 
+User user = User(
+  username: "",
+  password: "",
+);
+var x = 0;
+
+Future save() async {
+  var res = await http.post(
+      Uri.parse("http://192.168.1.102:8080/api/auth/signin"),
+      headers: {'Content-Type': 'application/json'},
+      body:
+          json.encode({'username': user.username, 'password': user.password}));
+  print(res.body);
+  if (res.body != null) {
+    x = 1;
+    print(x);
+  }
+}
+
 class _SignFormState extends State<SignForm> {
   final List<String> errors = ["ERROR"];
   final _formKey = GlobalKey<FormState>();
@@ -98,6 +121,7 @@ class _SignFormState extends State<SignForm> {
                 press: () {
                   if (_formKey.currentState?.validate() ?? true) {
                     _formKey.currentState?.save();
+                    // save();
                     Navigator.pushNamed(context, LoginSuccessScreen.routeName);
                   }
                 }),
@@ -115,8 +139,11 @@ class _SignFormState extends State<SignForm> {
       validator: MultiValidator([
         RequiredValidator(errorText: "* Required"),
         MinLengthValidator(6,
-            errorText: "password should be atleast 6 characters")
+            errorText: "password should be atleast 6 characters"),
       ]),
+      onChanged: (val) {
+        user.password = val;
+      },
       decoration: InputDecoration(
         labelText: "Password",
         hintText: "Enter your Password",
@@ -135,6 +162,9 @@ class _SignFormState extends State<SignForm> {
         RequiredValidator(errorText: "* Required"),
         MinLengthValidator(6, errorText: "email should be atleast 6 characters")
       ]),
+      onChanged: (val) {
+        user.username = val;
+      },
       decoration: InputDecoration(
         labelText: "Email",
         hintText: "Enter your email",
