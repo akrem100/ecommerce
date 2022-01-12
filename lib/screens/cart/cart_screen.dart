@@ -1,6 +1,8 @@
 import 'package:ecommerce/screens/cart/components/body.dart';
 import 'package:flutter/material.dart';
 
+import 'components/check_out_card.dart';
+
 class CartScreen extends StatelessWidget {
   static String routeName = "/cart";
   @override
@@ -21,6 +23,7 @@ class CartScreen extends StatelessWidget {
         ),
       ),
       body: Body(),
+      bottomNavigationBar: CheckoutCard(),
     );
   }
 }
